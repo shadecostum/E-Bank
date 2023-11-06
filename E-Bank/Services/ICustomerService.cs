@@ -1,22 +1,18 @@
-﻿namespace E_Bank.Models
+﻿using E_Bank.Models;
+
+namespace E_Bank.Services
 {
     public interface ICustomerService
     {
-
         public List<Customer> GetAll();
 
-        public Customer  GetById(int id);
+        public Customer GetById(int id);
 
         public int Add(Customer customer);
 
         public Customer Update(Customer customer);
 
         public void Delete(Customer customer);
-
-
-
-
-
 
     }
 }

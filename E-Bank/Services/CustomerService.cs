@@ -1,17 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using E_Bank.Models;
+using Microsoft.EntityFrameworkCore;
+using static E_Bank.Repository.IRepository;
 
-namespace E_Bank.Models
+namespace E_Bank.Services
 {
-    public class CustomerService:ICustomerService  
+    public class CustomerService:ICustomerService
     {
 
         IRepository<Customer> _repository;
         IRepository<Account> _accountRepository;
 
-        public CustomerService(IRepository<Customer> repository,IRepository<Account> account)
+        public CustomerService(IRepository<Customer> repository, IRepository<Account> account)
         {
             _repository = repository;
-            _accountRepository = account;   
+            _accountRepository = account;
         }
 
 
@@ -24,9 +26,9 @@ namespace E_Bank.Models
         public Customer GetById(int id)
         {
             var tableName = _repository.Get();
-          var DataFound=  tableName.Where(cus=>cus.IsActive==true &&cus.CustomerId==id )
-                .OrderBy(cus=>cus.CustomerId)
-                .FirstOrDefault();
+            var DataFound = tableName.Where(cus => cus.IsActive == true && cus.CustomerId == id)
+                  .OrderBy(cus => cus.CustomerId)
+                  .FirstOrDefault();
             if (DataFound != null)
             {
                 _repository.Detached(DataFound);
@@ -37,26 +39,26 @@ namespace E_Bank.Models
 
         public int Add(Customer customer)
         {
-          return _repository.Add(customer);
-           
+            return _repository.Add(customer);
+
         }
 
 
         public Customer Update(Customer customer)
         {
-           return _repository.Update(customer);
+            return _repository.Update(customer);
 
         }
 
         public void Delete(Customer customer)
         {
             _repository.delete(customer);
-            var customerQuery=_accountRepository.Get();
-            foreach(var item in customerQuery.Where(acn=>acn.CustomerId==customer.CustomerId).ToList())
+            var customerQuery = _accountRepository.Get();
+            foreach (var item in customerQuery.Where(acn => acn.CustomerId == customer.CustomerId).ToList())
             {
                 _accountRepository.delete(item);
             }
-           
+
         }
     }
 }

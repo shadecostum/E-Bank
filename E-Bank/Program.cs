@@ -1,7 +1,10 @@
 using E_Bank.Data;
 using E_Bank.Models;
+using E_Bank.Repository;
+using E_Bank.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using static E_Bank.Repository.IRepository;
 
 namespace E_Bank
 {

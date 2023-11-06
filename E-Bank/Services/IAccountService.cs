@@ -1,4 +1,6 @@
-﻿namespace E_Bank.Models
+﻿using E_Bank.Models;
+
+namespace E_Bank.Services
 {
     public interface IAccountService
     {
