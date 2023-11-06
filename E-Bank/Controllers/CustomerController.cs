@@ -16,7 +16,19 @@ namespace E_Bank.Controllers
         {
             _customerService = customerService;
         }
-
+        private CustomerDto ModelToDto(Customer account)
+        {
+            return new CustomerDto()
+            {
+               CustomerId = account.CustomerId,
+               FirstName = account.FirstName,
+               LastName = account.LastName,
+               Email = account.Email,
+               IsActive = account.IsActive,
+               CountAccounts = account.Accounts!=null?account.Accounts.Count():0,
+              
+            };
+        }
 
         [HttpGet("")]
         public IActionResult GetAll()
