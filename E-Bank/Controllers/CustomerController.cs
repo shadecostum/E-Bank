@@ -26,6 +26,7 @@ namespace E_Bank.Controllers
                Email = account.Email,
                IsActive = account.IsActive,
                CountAccounts = account.Accounts!=null?account.Accounts.Count():0,
+               UserId = account.UserId
               
             };
         }
@@ -33,13 +34,18 @@ namespace E_Bank.Controllers
         [HttpGet("")]
         public IActionResult GetAll()
         {
+            List<CustomerDto> result = new List<CustomerDto>();
           var DataList=  _customerService.GetAll();
 
             if (DataList.Count == 0) 
             {
                 return BadRequest("No customer Added");
             }
-            return Ok(DataList);
+            foreach (var Data in DataList) 
+            {
+                result.Add(ModelToDto(Data));
+            }
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]
