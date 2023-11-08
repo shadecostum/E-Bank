@@ -8,24 +8,28 @@ namespace E_Bank.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QueryController : ControllerBase
+    public class DocController : ControllerBase
     {
-        private readonly IQueryService _querService;
+
+        private readonly IDocService _docService;
 
 
-        public QueryController(IQueryService queryService)
+        public DocController(IDocService docService)
         {
-            _querService = queryService;
+            _docService = docService;
         }
-        private QueryDto ModelToDto(Query query)
+        private DocDto ModelToDto(Documents customer)
         {
-            return new QueryDto()
+            return new DocDto()
             {
-              CustomerId = query.CustomerId,
-              QueryId = query.QueryId,
-              QueryStatus = query.QueryStatus,
-              QueryText = query.QueryText,
-              ReplyQuery = query.ReplyQuery
+                CustomerId = customer.CustomerId,
+                DocumentId = customer.DocumentId,
+                DocumentData = customer.DocumentData,
+                DocumentType = customer.DocumentType,
+                Status = customer.Status,
+                UploadDate = customer.UploadDate
+                
+            
 
             };
         }
@@ -33,8 +37,8 @@ namespace E_Bank.Controllers
         [HttpGet("")]
         public IActionResult GetAll()
         {
-            List<QueryDto> result = new List<QueryDto>();
-            var DataList = _querService.GetAll();
+            List<DocDto> result = new List<DocDto>();
+            var DataList = _docService.GetAll();
 
             if (DataList.Count == 0)
             {
@@ -50,7 +54,7 @@ namespace E_Bank.Controllers
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
-            var CustomerData = _querService.GetById(id);
+            var CustomerData = _docService.GetById(id);
 
             if (CustomerData != null)
             {
@@ -60,25 +64,25 @@ namespace E_Bank.Controllers
         }
 
 
-        private Query ConvertoModel(QueryDto queryDto)
+        private Documents ConvertoModel(DocDto customerDto)
         {
-            return new Query()
+            return new Documents()
             {
-              
-                CustomerId=queryDto.CustomerId,
-                QueryId=queryDto.QueryId,
-                QueryStatus = queryDto.QueryStatus,
-                QueryText = queryDto.QueryText,
-                ReplyQuery = queryDto.ReplyQuery
+               UploadDate = customerDto.UploadDate,
+               CustomerId = customerDto.CustomerId,
+               DocumentData = customerDto.DocumentData,
+               DocumentType = customerDto.DocumentType,
+               Status = customerDto.Status,
                 
+
             };
         }
 
         [HttpPost("")]
-        public IActionResult Post(QueryDto customerDto)
+        public IActionResult Post(DocDto customerDto)
         {
             var customer = ConvertoModel(customerDto);
-            var status = _querService.Add(customer);
+            var status = _docService.Add(customer);
 
             if (status != null)
             {
@@ -89,14 +93,14 @@ namespace E_Bank.Controllers
 
         [HttpPut]
 
-        public IActionResult Put(QueryDto customerDto)
+        public IActionResult Put(DocDto customerDto)
         {
-            var Customer = _querService.GetById(customerDto.QueryId);
+            var Customer = _docService.GetById(customerDto.DocumentId);
 
             if (Customer != null)
             {
                 var modified = ConvertoModel(customerDto);
-                _querService.Update(modified);
+                _docService.Update(modified);
                 return Ok(modified);
             }
             return BadRequest("Cannot modify data not found");
@@ -105,14 +109,15 @@ namespace E_Bank.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var matched = _querService.GetById(id);
+            var matched = _docService.GetById(id);
             if (matched != null)
             {
-                _querService.Delete(matched);
+                _docService.Delete(matched);
                 return Ok(matched);
             }
             return BadRequest("cannot find id to delete");
         }
+
 
 
 

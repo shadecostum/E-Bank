@@ -17,17 +17,17 @@ namespace E_Bank.Controllers
         {
             _customerService = customerService;
         }
-        private CustomerDto ModelToDto(Customer account)
+        private CustomerDto ModelToDto(Customer customer)
         {
             return new CustomerDto()
             {
-               CustomerId = account.CustomerId,
-               FirstName = account.FirstName,
-               LastName = account.LastName,
-               Email = account.Email,
-               IsActive = account.IsActive,
-               CountAccounts = account.Accounts!=null?account.Accounts.Count():0,
-               UserId = account.UserId
+               CustomerId = customer.CustomerId,
+               FirstName = customer.FirstName,
+               LastName = customer.LastName,
+               Email = customer.Email,
+               IsActive = customer.IsActive,
+               CountAccounts = customer.Accounts!=null? customer.Accounts.Count():0,
+               UserId = customer.UserId
               
             };
         }

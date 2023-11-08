@@ -8,24 +8,30 @@ namespace E_Bank.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QueryController : ControllerBase
+    public class AdminController : ControllerBase
     {
-        private readonly IQueryService _querService;
 
+        private IAdminService _adminService;
 
-        public QueryController(IQueryService queryService)
+        public AdminController(IAdminService accountService)
         {
-            _querService = queryService;
+            _adminService = accountService;
         }
-        private QueryDto ModelToDto(Query query)
+
+
+
+
+
+
+        private AdminDto ModelToDto(Admin customer)
         {
-            return new QueryDto()
+            return new AdminDto()
             {
-              CustomerId = query.CustomerId,
-              QueryId = query.QueryId,
-              QueryStatus = query.QueryStatus,
-              QueryText = query.QueryText,
-              ReplyQuery = query.ReplyQuery
+              UserId = customer.UserId,
+              FirstName = customer.FirstName,
+              LastName = customer.LastName,
+              AdminId = customer.AdminId,
+              
 
             };
         }
@@ -33,8 +39,8 @@ namespace E_Bank.Controllers
         [HttpGet("")]
         public IActionResult GetAll()
         {
-            List<QueryDto> result = new List<QueryDto>();
-            var DataList = _querService.GetAll();
+            List<AdminDto> result = new List<AdminDto>();
+            var DataList = _adminService.GetAll();
 
             if (DataList.Count == 0)
             {
@@ -50,7 +56,7 @@ namespace E_Bank.Controllers
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
-            var CustomerData = _querService.GetById(id);
+            var CustomerData = _adminService.GetById(id);
 
             if (CustomerData != null)
             {
@@ -60,25 +66,23 @@ namespace E_Bank.Controllers
         }
 
 
-        private Query ConvertoModel(QueryDto queryDto)
+        private Admin ConvertoModel(AdminDto adminDto)
         {
-            return new Query()
+            return new Admin()
             {
-              
-                CustomerId=queryDto.CustomerId,
-                QueryId=queryDto.QueryId,
-                QueryStatus = queryDto.QueryStatus,
-                QueryText = queryDto.QueryText,
-                ReplyQuery = queryDto.ReplyQuery
-                
+             AdminId = adminDto.AdminId,
+              FirstName= adminDto.FirstName,
+              LastName= adminDto.LastName,
+              UserId= adminDto.UserId
+
             };
         }
 
         [HttpPost("")]
-        public IActionResult Post(QueryDto customerDto)
+        public IActionResult Post(AdminDto customerDto)
         {
             var customer = ConvertoModel(customerDto);
-            var status = _querService.Add(customer);
+            var status = _adminService.Add(customer);
 
             if (status != null)
             {
@@ -89,14 +93,14 @@ namespace E_Bank.Controllers
 
         [HttpPut]
 
-        public IActionResult Put(QueryDto customerDto)
+        public IActionResult Put(AdminDto customerDto)
         {
-            var Customer = _querService.GetById(customerDto.QueryId);
+            var Customer = _adminService.GetById(customerDto.AdminId);
 
             if (Customer != null)
             {
                 var modified = ConvertoModel(customerDto);
-                _querService.Update(modified);
+                _adminService.Update(modified);
                 return Ok(modified);
             }
             return BadRequest("Cannot modify data not found");
@@ -105,16 +109,13 @@ namespace E_Bank.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var matched = _querService.GetById(id);
+            var matched = _adminService.GetById(id);
             if (matched != null)
             {
-                _querService.Delete(matched);
+                _adminService.Delete(matched);
                 return Ok(matched);
             }
             return BadRequest("cannot find id to delete");
         }
-
-
-
     }
 }

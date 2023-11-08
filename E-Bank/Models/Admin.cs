@@ -12,7 +12,7 @@ namespace E_Bank.Models
 
         public string LastName { get; set; }
 
-        public string AdminPassword { get; set; } = string.Empty;
+       // public string AdminPassword { get; set; } = string.Empty;
 
 
         public User User { get; set; }

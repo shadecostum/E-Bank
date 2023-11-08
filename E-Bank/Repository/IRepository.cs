@@ -1,4 +1,6 @@
 ﻿using E_Bank.Data;
+using E_Bank.Models;
+
 namespace E_Bank.Repository
 {
     public interface IRepository
@@ -15,6 +17,7 @@ namespace E_Bank.Repository
             public T Update(T entity);
 
             public void delete(T entity);
+            
         }
     }
 }

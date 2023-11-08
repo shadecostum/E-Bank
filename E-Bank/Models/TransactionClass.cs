@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace E_Bank.Models
 {
-    public class Transaction
+    public class TransactionClass
     {
         [Key]
         public int TransactionId { get; set; }
 
-        public TransactionType TransactionType { get; set; }
+        public string TransactionType { get; set; }
 
         public double TransactionAmount { get; set; }
 

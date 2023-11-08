@@ -18,9 +18,9 @@ namespace E_Bank.Models
 
         public List<Account> Accounts { get; set; }
 
-       // public List<Documents> Documents { get; set; }
+       public List<Documents> Documents { get; set; }
 
-      //  public List<Query> Queries { get; set; }
+       public List<Query> Queries { get; set; }
 
         public User User { get; set; }
         [ForeignKey("User")]

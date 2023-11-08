@@ -39,6 +39,14 @@ namespace E_Bank
             builder.Services.AddTransient(typeof(IRepository<>), typeof(EntityRepository<>));//note
             builder.Services.AddTransient<ICustomerService, CustomerService>();//new generatic used registering services
             builder.Services.AddTransient<IAccountService, AccountService>();
+            builder.Services.AddTransient<IRoleService, RoleService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<ITransactionService, TransactionService>();
+            builder.Services.AddTransient<IAdminService, AdminService>();
+            builder.Services.AddTransient<IQueryService, QueryService>();
+            builder.Services.AddTransient<IDocService,DocService>();
+           
+
 
             //inbuild  only change in front connect
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

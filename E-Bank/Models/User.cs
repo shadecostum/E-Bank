@@ -13,16 +13,16 @@ namespace E_Bank.Models
 
         public string Password { get; set; }
 
-        public Customer Customer { get; set; }
-        //[ForeignKey("Customer")]
-        //public int CustomerId { get; set; }
-
 
         public Role Role { get; set; }
         [ForeignKey("Role")]
         public int RoleId { get; set; }
 
+
+
         public Admin admin { get; set; }
+
+        public Customer Customer { get; set; }
 
     }
 }

@@ -7,7 +7,7 @@ namespace E_Bank.Dto
     {
         public int AccountNumber { get; set; }
 
-        public AccountType AccountType { get; set; }
+        public string AccountType { get; set; }
         // public string AccountNumber { get; set; }
 
         public DateTime OpenningDate { get; set; }

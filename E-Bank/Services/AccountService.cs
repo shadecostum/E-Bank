@@ -1,4 +1,5 @@
 ﻿using E_Bank.Models;
+using Microsoft.EntityFrameworkCore;
 using static E_Bank.Repository.IRepository;
 
 namespace E_Bank.Services
@@ -7,13 +8,23 @@ namespace E_Bank.Services
         public class AccountService : IAccountService
         {
             private IRepository<Account> _repository;
+        private IRepository<TransactionClass> _transactionClassRepository;
 
-            public AccountService(IRepository<Account> repository)
+            public AccountService(IRepository<Account> repository,IRepository<TransactionClass> transactionRep)
             {
                 _repository = repository;
+            _transactionClassRepository = transactionRep;
             }
 
-            public int Add(Account account)
+        public List<Account> GetAll()
+        {
+            return _repository.GetAll().Where(cus => cus.IsActive)
+                     .Include(acnt => acnt.Transactions.Where(acnt => acnt.IsActive == true)).ToList();
+
+        }
+
+
+        public int Add(Account account)
             {
                 return _repository.Add(account);
             }
@@ -31,5 +42,23 @@ namespace E_Bank.Services
                 return account;
 
             }
+
+                 public Account Update(Account account)
+                {
+                   return _repository.Update(account);
+                 }
+
+        public void Delete(Account account)
+        {
+            _repository.delete(account);
+            var transactionQuery=_transactionClassRepository.Get();
+            foreach (var transactionClass in transactionQuery.Where(tran=>tran.AccountId==account.AccountNumber))
+            {
+                _transactionClassRepository.delete(transactionClass);
+            }
+
+        }
+
+
         }
 }

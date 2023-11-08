@@ -8,7 +8,7 @@ namespace E_Bank.Models
         [Key]
         public int AccountNumber { get; set; }
 
-        public AccountType AccountType { get; set; }
+        public string AccountType { get; set; }
        // public string AccountNumber { get; set; }
 
         public DateTime OpenningDate { get; set; }
@@ -23,7 +23,7 @@ namespace E_Bank.Models
         public int CustomerId { get; set; } = 0;
 
 
-        public List<Transaction> Transactions { get; set; }
+        public List<TransactionClass> Transactions { get; set; }
 
 
 

@@ -11,13 +11,15 @@ namespace E_Bank.Data
 
         public DbSet<Customer> customersTable { get; set; }
 
-        public DbSet<Transaction> transactionsTable { get; set; }
+        public DbSet<TransactionClass> transactionsTable { get; set; }
 
         public DbSet<Role> rolesTable { get; set; }
 
         public DbSet<Query> queryTable { get; set; }
 
         public DbSet<Documents> documentsTable { get; set; }
+
+        public DbSet<Admin> adminsTable { get; set; }
 
         //connection established it should set on program cs
         public MyContext(DbContextOptions<MyContext> options ):base(options)
