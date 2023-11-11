@@ -6,14 +6,14 @@ namespace E_Bank.Services
     {
 
 
-        public List<Admin> GetAll();
-        public Admin GetById(int id);
+        //public List<Admin> GetAll();
+        //public Admin GetById(int id);
 
-        public int Add(Admin admin);
+        //public int Add(Admin admin);
 
-        public Admin Update(Admin admin);
+        //public Admin Update(Admin admin);
 
-        public void Delete(Admin admin);
+        //public void Delete(Admin admin);
       
     }
 }

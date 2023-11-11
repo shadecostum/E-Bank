@@ -1,4 +1,5 @@
 ﻿using E_Bank.Dto;
+using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,63 +19,61 @@ namespace E_Bank.Controllers
             this._transactionService = transactionService;
         }
 
-        private TransactionClass ConvertoModel(TransactionDto transaction)
+
+        //deposite
+
+        [HttpPost("deposite")]
+        public IActionResult DepositeAmount([FromBody]TransactionDto transactionDto)
         {
-            return new TransactionClass()
+            var result = _transactionService.Deposite(transactionDto);
+
+            if(result == 1)
             {
-               TransactionId = transaction.TransactionId,
-               TransactionType = transaction.TransactionType,
-               TransactionAmount = transaction.TransactionAmount,
-               Description = transaction.Description,
-               State = transaction.State,
-               IsActive = transaction.IsActive,
-               TransactionDate = transaction.TransactionDate,
-               AccountId = transaction.AccountId,
-
-            };
-        }
-        [HttpPost("")]
-        public IActionResult Post(TransactionDto transactionDto) 
-        {
-            var transactionss = ConvertoModel(transactionDto);
-
-            var status = _transactionService.Add(transactionss);
-
-            if(status != null)
-            {
-                return Ok(status);
+                return Ok("Transaction success");
             }
-            return BadRequest("cannot added");
+
+            return BadRequest("server error please try again after some time");
         }
 
-        [HttpPut("")]
-        public IActionResult Put(TransactionDto transactionDto)
-        {
-            var match=_transactionService.GetById(transactionDto.TransactionId);
 
-            if(match != null)
+        [HttpPost("Withdrawal")]  
+        public IActionResult WithdrawAmount([FromBody]TransactionDto transactionDto)
+        {
+            var result = _transactionService.Withdraw(transactionDto);
+            if(result == 1)
             {
-                var modified = ConvertoModel(transactionDto);
-               var updateTransaction= _transactionService.Update(modified);
-                return Ok(updateTransaction);
+                return Ok("withdrew  success");
             }
-            return BadRequest("Not matched ");
+            return BadRequest("Bank Server error please try again after some time");
         }
 
-        private TransactionDto ModelToDto(TransactionClass transaction)
+        [HttpPost("TransferAmount")]
+        public IActionResult TransferAmount([FromBody]TransferDto transferDto)
         {
-            return new TransactionDto()
+            var result = _transactionService.TransferAmount(transferDto);
+            if (result == 1)
             {
-                AccountId = transaction.AccountId,
-                TransactionType = transaction.TransactionType,
-                TransactionAmount = transaction.TransactionAmount,
-                Description = transaction.Description,
-                State = transaction.State,
-                IsActive = transaction.IsActive,
-                TransactionDate = transaction.TransactionDate,
-                TransactionId = transaction.TransactionId,
-            };
+                return Ok("Transaction success");
+            }
+            return BadRequest("Bank Server error please try again after some time");
         }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet("")]
         public IActionResult GetAll()
@@ -107,8 +106,10 @@ namespace E_Bank.Controllers
             {
                 return Ok(transactionData);
             }
-            return BadRequest("Your search Id NotFound");
+            throw new UserNotFoundException("Cannot find the match id");
         }
+
+
 
         [HttpDelete]
         public IActionResult Delete(int id)
@@ -121,6 +122,70 @@ namespace E_Bank.Controllers
             }
             return BadRequest("No match found to delete");
         }
-       
+
+
+
+        private TransactionClass ConvertoModel(TransactionDto transaction)
+        {
+            return new TransactionClass()
+            {
+                TransactionId = transaction.TransactionId,
+                TransactionType = transaction.TransactionType,
+                TransactionAmount = transaction.TransactionAmount,
+                Description = transaction.Description,
+                State = "sucsess",
+                IsActive = true,
+                TransactionDate = DateTime.Now,
+                AccountId = transaction.AccountId,
+
+            };
+        }
+
+
+        private TransactionDto ModelToDto(TransactionClass transaction)
+        {
+            return new TransactionDto()
+            {
+                AccountId = transaction.AccountId,
+                TransactionType = transaction.TransactionType,
+                TransactionAmount = transaction.TransactionAmount,
+                Description = transaction.Description,
+              //  State = transaction.State,
+              //  IsActive = transaction.IsActive,
+               // TransactionDate = transaction.TransactionDate,
+                TransactionId = transaction.TransactionId,
+            };
+        }
+
+
+
+        //[HttpPost("")]
+        //public IActionResult Post(TransactionDto transactionDto) 
+        //{
+        //    var transactionss = ConvertoModel(transactionDto);
+
+        //    var status = _transactionService.Add(transactionss);
+
+        //    if(status != null)
+        //    {
+        //        return Ok(status);
+        //    }
+        //    return BadRequest("cannot added");
+        //}
+
+        //[HttpPut("")]
+        //public IActionResult Put(TransactionDto transactionDto)
+        //{
+        //    var match=_transactionService.GetById(transactionDto.TransactionId);
+
+        //    if(match != null)
+        //    {
+        //        var modified = ConvertoModel(transactionDto);
+        //       var updateTransaction= _transactionService.Update(modified);
+        //        return Ok(updateTransaction);
+        //    }
+        //    return BadRequest("Not matched ");
+        //}
+
     }
 }

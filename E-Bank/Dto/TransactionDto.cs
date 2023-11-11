@@ -13,11 +13,11 @@ namespace E_Bank.Dto
 
         public string Description { get; set; }
 
-        public DateTime TransactionDate { get; set; }
+      //  public DateTime TransactionDate { get; set; }
 
-        public string State { get; set; }//pending or approved show
+       // public string State { get; set; }//pending or approved show
 
-        public bool IsActive { get; set; }//soft delete
+      //  public bool IsActive { get; set; }//soft delete
 
 
        // public Account Account { get; set; }

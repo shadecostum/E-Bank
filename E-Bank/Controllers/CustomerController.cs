@@ -1,4 +1,5 @@
 ﻿using E_Bank.Dto;
+using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
@@ -58,7 +59,8 @@ namespace E_Bank.Controllers
             {
                 return Ok(CustomerData);
             }
-            return BadRequest("Your search Id NotFound");
+            throw new UserNotFoundException("Cannot find the match id");
+           // return BadRequest("Your search Id NotFound");
         }
 
 
@@ -102,7 +104,7 @@ namespace E_Bank.Controllers
                 _customerService.Update(modified);
                 return Ok(modified);
             }
-            return BadRequest("Cannot modify data not found");
+            throw new UserNotFoundException("Cannot find the match id");
         }
 
         [HttpDelete]
@@ -114,7 +116,7 @@ namespace E_Bank.Controllers
                 _customerService.Delete(matched);
                 return Ok(matched);
             }
-            return BadRequest("cannot find id to delete");
+            throw new UserNotFoundException("Cannot find the match id");
         }
 
     }

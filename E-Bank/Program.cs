@@ -1,8 +1,12 @@
 using E_Bank.Data;
+using E_Bank.MiddleWare;
 using E_Bank.Models;
 using E_Bank.Repository;
 using E_Bank.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 using static E_Bank.Repository.IRepository;
 
@@ -32,8 +36,17 @@ namespace E_Bank
 
             //next change based on registering
 
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("AllowLocalhost4200", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                });
+            });//for connecting frond end
+
             //repository Normal
-            // builder.Services.AddTransient<IUserRepo,UserRepo>();//old methodregistering needed must added or doesnt work
+
+            builder.Services.AddTransient<IUserRepo,UserRepo>();//old methodregistering needed must added or doesnt work
 
             //Genetic repository
             builder.Services.AddTransient(typeof(IRepository<>), typeof(EntityRepository<>));//note
@@ -53,6 +66,23 @@ namespace E_Bank
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //added auth  schema from appsetting
+            //added auth scheme 6
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                    builder.Configuration.GetSection("AppSettings:Key").Value!)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -64,8 +94,15 @@ namespace E_Bank
 
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowLocalhost4200");//front end connection
+            //authentication needed
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
+
+
+          app.UseMiddleware<ErrorHandler>();//middleware added errorhandle
 
             app.MapControllers();
 

@@ -1,4 +1,5 @@
 ﻿using E_Bank.Dto;
+using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,7 @@ namespace E_Bank.Controllers
             };
         }
        
-        [HttpGet("")]
+        [HttpGet("activeAccounts")]//admin view all active account
         public IActionResult GetAll()
         {
             List<AccountDto> result = new List<AccountDto>();
@@ -51,17 +52,70 @@ namespace E_Bank.Controllers
         }
 
 
+        [HttpGet("accounRequest")] //admin view all Not active account
+        public IActionResult GetRequest()
+        {
+            //List<AccountDto> result = new List<AccountDto>();
+            var DataList = _accountService.GetAllRequest();
 
-        [HttpGet("{id:int}")]
+            if (DataList.Count == 0)
+            {
+                return BadRequest("No Request Added");
+            }
+            //foreach (var Data in DataList)
+            //{
+            //    result.Add(ModelToDto(Data));
+            //}
+            return Ok(DataList);
+        }
+
+
+
+
+
+
+
+        [HttpGet("activeId/{id:int}")]
+        public IActionResult ActivateAccount(int id)
+        {
+          var result= _accountService.ActivateRequest(id);
+            if (result != null)
+            {
+              return  Ok("Activated success full");
+            }
+            return BadRequest("Cannot Activate match not found");
+
+        }
+
+        //[HttpGet("TransactionFilter/{id:int}")] //admin search using id get specific customer 
+        //public IActionResult Get(int id)
+        //{
+        //    var matched = _accountService.GetById(id);
+
+        //    if (matched != null)
+        //    {
+        //        return Ok(matched);
+        //    }
+        //    throw new UserNotFoundException("Cannot find the match id");
+
+        //}
+
+
+
+
+
+
+
+        [HttpGet("{id:int}")] //admin search using id get specific customer 
         public IActionResult Get(int id)
         {
-          var matched= _accountService.GetById(id);
+            var matched = _accountService.GetById(id);
 
             if (matched != null)
             {
-              return  Ok(matched);
+                return Ok(matched);
             }
-            return NotFound("sorry id cannot find");
+            throw new UserNotFoundException("Cannot find the match id");
 
         }
 
@@ -73,7 +127,7 @@ namespace E_Bank.Controllers
                 AccountBalance = account.AccountBalance,
                 AccountType = account.AccountType,
                 IntrestRate = account.IntrestRate,
-                IsActive = account.IsActive,
+                IsActive = account.IsActive=false,
                 OpenningDate = account.OpenningDate,
                 CustomerId = account.CustomerId,
                 

@@ -1,4 +1,5 @@
 ﻿using E_Bank.Dto;
+using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
@@ -60,7 +61,7 @@ namespace E_Bank.Controllers
             {
                 return Ok(CustomerData);
             }
-            return BadRequest("Your search Id NotFound");
+            throw new UserNotFoundException("Cannot find the match id");
         }
 
 

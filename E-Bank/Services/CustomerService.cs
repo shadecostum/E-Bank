@@ -9,11 +9,16 @@ namespace E_Bank.Services
 
         IRepository<Customer> _repository;
         IRepository<Account> _accountRepository;
+        IRepository<Query> _queryRepository;
+        IRepository<Documents> _documentsRepository;
 
-        public CustomerService(IRepository<Customer> repository, IRepository<Account> account)
+        public CustomerService(IRepository<Customer> repository, IRepository<Account> account,
+            IRepository<Query> queryRepository,IRepository<Documents> documentRep)
         {
             _repository = repository;
             _accountRepository = account;
+            _queryRepository = queryRepository;
+            _documentsRepository = documentRep;
         }
 
 
@@ -58,6 +63,18 @@ namespace E_Bank.Services
             {
                 _accountRepository.delete(item);
             }
+            var queryQuery=_queryRepository.Get();
+            foreach (var item in queryQuery.Where(qr=>qr.CustomerId==customer.CustomerId).ToList() )
+            {
+                _queryRepository.delete(item);
+            }
+            var documentQuery=_documentsRepository.Get();
+            foreach(var item2 in documentQuery.Where(doc=>doc.CustomerId==customer.CustomerId).ToList() )
+            {
+                _documentsRepository.delete(item2);
+            }
+
+           
 
         }
     }
