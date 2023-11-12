@@ -6,7 +6,8 @@ namespace E_Bank.Services
 {
     public interface ITransactionService
     {
-      
+
+        public List<TransactionClass> GetByDate(DateTime dateTime);//admin date filter
         public int Deposite(TransactionDto transaction);
 
         public int Withdraw(TransactionDto transaction);

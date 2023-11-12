@@ -18,18 +18,67 @@ namespace E_Bank.Controllers
         {
             _querService = queryService;
         }
+
+
+
+        [HttpPost("customerAskQuery")]//customer Query send
+        public IActionResult Post(QueryDto queryDto)
+        {
+            var matchedAccount = _querService.QueryRequsest(queryDto);
+
+            if (matchedAccount != null)
+            {
+                return Ok("Query send to customer succes");
+            }
+            throw new UserNotFoundException("Cannot send Query internal error ");
+        }
+
+
+
         private QueryDto ModelToDto(Query query)
         {
             return new QueryDto()
             {
-              CustomerId = query.CustomerId,
-              QueryId = query.QueryId,
-              QueryStatus = query.QueryStatus,
-              QueryText = query.QueryText,
-              ReplyQuery = query.ReplyQuery
+                CustomerId = query.CustomerId,
+                 QueryId = query.QueryId,
+                QueryText = query.QueryText,
+
 
             };
         }
+
+        [HttpGet("adminShowQuery")]//admin show list of Query Requests
+
+        public IActionResult GetRequestQuery()
+        {
+           List<QueryDto> query = new List<QueryDto>();
+            var matched = _querService.ShowQuery();
+
+            if (matched.Count== 0)
+            {
+                throw new UserNotFoundException("No  Request finded ");
+            }
+            foreach (var Data in matched)
+            {
+                query.Add(ModelToDto(Data));
+            }
+            return Ok(query);
+
+        }
+
+
+        [HttpPut("adminResponceQuery")] //admin reply query
+        public IActionResult Put(QueryResponceDto queryDto)
+        {
+            var matched= _querService.QueryResponce(queryDto);
+
+            if(matched ==0)
+            {
+                throw new UserNotFoundException("No  Request finded ");
+            }
+            return Ok("Successfully replied");
+        }
+
 
         [HttpGet("")]
         public IActionResult GetAll()
@@ -68,40 +117,29 @@ namespace E_Bank.Controllers
               
                 CustomerId=queryDto.CustomerId,
                 QueryId=queryDto.QueryId,
-                QueryStatus = queryDto.QueryStatus,
+               // QueryStatus = queryDto.QueryStatus,
                 QueryText = queryDto.QueryText,
-                ReplyQuery = queryDto.ReplyQuery
+              //  ReplyQuery = queryDto.ReplyQuery
                 
             };
         }
 
-        [HttpPost("")]
-        public IActionResult Post(QueryDto customerDto)
-        {
-            var customer = ConvertoModel(customerDto);
-            var status = _querService.Add(customer);
+    
 
-            if (status != null)
-            {
-                return Ok(status);
-            }
-            return BadRequest("cannot added");
-        }
+        //[HttpPut]
 
-        [HttpPut]
+        //public IActionResult Put(QueryDto customerDto)
+        //{
+        //    var Customer = _querService.GetById(customerDto.QueryId);
 
-        public IActionResult Put(QueryDto customerDto)
-        {
-            var Customer = _querService.GetById(customerDto.QueryId);
-
-            if (Customer != null)
-            {
-                var modified = ConvertoModel(customerDto);
-                _querService.Update(modified);
-                return Ok(modified);
-            }
-            return BadRequest("Cannot modify data not found");
-        }
+        //    if (Customer != null)
+        //    {
+        //        var modified = ConvertoModel(customerDto);
+        //        _querService.Update(modified);
+        //        return Ok(modified);
+        //    }
+        //    return BadRequest("Cannot modify data not found");
+        //}
 
         [HttpDelete]
         public IActionResult Delete(int id)

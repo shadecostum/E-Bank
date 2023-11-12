@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Bank.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20231106171357_v1")]
-    partial class v1
+    [Migration("20231111100815_version1")]
+    partial class version1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,7 +83,7 @@ namespace E_Bank.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Admin");
+                    b.ToTable("adminsTable");
                 });
 
             modelBuilder.Entity("E_Bank.Models.Customer", b =>
@@ -164,13 +164,18 @@ namespace E_Bank.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("QueryStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("QueryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("QueryStatus")
+                        .HasColumnType("bit");
 
                     b.Property<string>("QueryText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReplyDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReplyQuery")
                         .IsRequired()
@@ -200,7 +205,7 @@ namespace E_Bank.Migrations
                     b.ToTable("rolesTable");
                 });
 
-            modelBuilder.Entity("E_Bank.Models.Transaction", b =>
+            modelBuilder.Entity("E_Bank.Models.TransactionClass", b =>
                 {
                     b.Property<int>("TransactionId")
                         .ValueGeneratedOnAdd()
@@ -301,7 +306,7 @@ namespace E_Bank.Migrations
             modelBuilder.Entity("E_Bank.Models.Documents", b =>
                 {
                     b.HasOne("E_Bank.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Documents")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -312,7 +317,7 @@ namespace E_Bank.Migrations
             modelBuilder.Entity("E_Bank.Models.Query", b =>
                 {
                     b.HasOne("E_Bank.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Queries")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -320,7 +325,7 @@ namespace E_Bank.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("E_Bank.Models.Transaction", b =>
+            modelBuilder.Entity("E_Bank.Models.TransactionClass", b =>
                 {
                     b.HasOne("E_Bank.Models.Account", "Account")
                         .WithMany("Transactions")
@@ -350,6 +355,10 @@ namespace E_Bank.Migrations
             modelBuilder.Entity("E_Bank.Models.Customer", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("Documents");
+
+                    b.Navigation("Queries");
                 });
 
             modelBuilder.Entity("E_Bank.Models.Role", b =>

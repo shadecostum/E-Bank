@@ -42,7 +42,8 @@ namespace E_Bank.Controllers
 
             if (DataList.Count == 0)
             {
-                return BadRequest("No customer Added");
+                throw new UserNotFoundException("Cannot find any Account ");
+               // return BadRequest("No customer Added");
             }
             foreach (var Data in DataList)
             {
@@ -60,7 +61,7 @@ namespace E_Bank.Controllers
 
             if (DataList.Count == 0)
             {
-                return BadRequest("No Request Added");
+                throw new UserNotFoundException("Cannot find any Account ");
             }
             //foreach (var Data in DataList)
             //{
@@ -83,7 +84,7 @@ namespace E_Bank.Controllers
             {
               return  Ok("Activated success full");
             }
-            return BadRequest("Cannot Activate match not found");
+            throw new UserNotFoundException("Cannot find the match id");
 
         }
 
@@ -99,11 +100,6 @@ namespace E_Bank.Controllers
         //    throw new UserNotFoundException("Cannot find the match id");
 
         //}
-
-
-
-
-
 
 
         [HttpGet("{id:int}")] //admin search using id get specific customer 
@@ -123,12 +119,12 @@ namespace E_Bank.Controllers
         {
             return new Account()
             {
-                AccountNumber = account.AccountNumber,
+                
                 AccountBalance = account.AccountBalance,
                 AccountType = account.AccountType,
-                IntrestRate = account.IntrestRate,
-                IsActive = account.IsActive=false,
-                OpenningDate = account.OpenningDate,
+                IntrestRate =0,
+                IsActive =false,
+                OpenningDate = DateTime.Now,
                 CustomerId = account.CustomerId,
                 
 
@@ -137,16 +133,16 @@ namespace E_Bank.Controllers
 
 
 
-        [HttpPost("")]
+        [HttpPost("customerAccountRequest")]
         public IActionResult Post(AccountDto accountDto)
         {
             var Converted=DtoToModel(accountDto);
           var sucess=  _accountService.Add(Converted);
             if(sucess !=null)
             {
-              return  Ok(sucess);
+              return  Ok("Account request successfully submited");
             }
-            return BadRequest("Adding error");
+            return BadRequest("Account creating error");
         }
 
         [HttpPut("")]
@@ -159,7 +155,7 @@ namespace E_Bank.Controllers
                 _accountService.Update(account);
                 return Ok(accountDto);
             }
-            return NotFound("update data doesn't match");
+            throw new UserNotFoundException("Cannot find any Account ");
         }
 
         [HttpDelete("")]
@@ -171,7 +167,7 @@ namespace E_Bank.Controllers
                 _accountService.Delete(matched);
                 return Ok(matched);
             }
-            return NotFound("Cannot find deleting item");
+            throw new UserNotFoundException("Cannot find any Account ");
         }
 
        

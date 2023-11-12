@@ -18,6 +18,25 @@ namespace E_Bank.Controllers
         {
             _customerService = customerService;
         }
+
+
+        [HttpGet("passbook")]
+        public IActionResult PassBook(int id)
+        {
+           var matched= _customerService.ViewPassBook(id);
+
+            if (matched != null)
+            {
+                return Ok(matched);
+            }
+
+            return BadRequest("No Account created");
+
+        }
+
+
+
+
         private CustomerDto ModelToDto(Customer customer)
         {
             return new CustomerDto()
@@ -87,9 +106,9 @@ namespace E_Bank.Controllers
 
             if(status !=null) 
             {
-                return Ok(status);
+                return Ok("succefully customer Account created");
             }
-            return BadRequest("cannot added");
+            return BadRequest("cannot add accoun server error ");
         }
 
         [HttpPut]
@@ -104,7 +123,7 @@ namespace E_Bank.Controllers
                 _customerService.Update(modified);
                 return Ok(modified);
             }
-            throw new UserNotFoundException("Cannot find the match id");
+            throw new UserNotFoundException("Cannot find the match id for update");
         }
 
         [HttpDelete]

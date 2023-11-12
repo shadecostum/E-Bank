@@ -1,4 +1,5 @@
 ﻿using E_Bank.Dto;
+using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Repository;
 using Microsoft.AspNetCore.Http;
@@ -38,11 +39,10 @@ namespace E_Bank.Controllers
                     return Ok(new ReturnMessage() { Message="Registered succesfully"});
 
                 }
-                return BadRequest("some issue inserting");
-
+                throw new UserNotFoundException("Cannot regsiter accoun inavlid entry ");// need to find exception 1
 
             }
-            return BadRequest("user alredy exist");
+            throw new UserNotFoundException("Account alredy exist");//ok
 
         }
 
@@ -64,7 +64,8 @@ namespace E_Bank.Controllers
                 }
                
             }
-            return BadRequest("username/password inavlid");
+           // return BadRequest("username/password inavlid");
+            throw new UserNotFoundException("username/password inavlid");
         }
 
         private string CreateToken(User existingUser)

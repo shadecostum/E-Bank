@@ -1,4 +1,5 @@
-﻿using E_Bank.Models;
+﻿using E_Bank.Dto;
+using E_Bank.Models;
 using static E_Bank.Repository.IRepository;
 
 namespace E_Bank.Services
@@ -13,16 +14,63 @@ namespace E_Bank.Services
         public QueryService(IRepository<Query> repository)
         {
             _repository = repository;
-           
         }
 
 
-
-
-        public int Add(Query customer)
+        public int QueryRequsest(QueryDto queryDto)
         {
-            return _repository.Add(customer);
+
+            Query query = new Query()
+            {
+                CustomerId = queryDto.CustomerId,
+                QueryDate = DateTime.Now,
+                QueryStatus = false,
+                QueryText = queryDto.QueryText,
+                ReplyDate = DateTime.Now,
+                ReplyQuery = ""
+            };
+            var success=  _repository.Add(query);
+
+            if(success != null)
+            {
+                return 1;
+            }
+            return 0;
         }
+
+        public List<Query> ShowQuery()
+        {
+
+         var  matchedList=  _repository.Get().Where(qu=>qu.QueryStatus==false).ToList();
+
+            if(matchedList.Count == 0 )
+            {
+                return null;
+            }
+
+            return matchedList;
+
+        }
+
+        public int QueryResponce(QueryResponceDto responceDto)
+        {
+          var matched=  _repository.Get()
+                            .Where(qu => qu.CustomerId == responceDto.CustomerId && qu.QueryStatus == false)
+                            .FirstOrDefault();
+            if(matched!=null)
+            {
+                matched.ReplyQuery = responceDto.ReplyQuery;
+                matched.QueryStatus = true;
+
+                _repository.Update(matched);
+                return 1;
+            }
+            return 0;
+        }
+
+
+
+
 
         public void Delete(Query customer)
         {
@@ -33,7 +81,8 @@ namespace E_Bank.Services
 
         public List<Query> GetAll()
         {
-            return _repository.GetAll().ToList();
+            return _repository.GetAll().Where(qu=>qu.QueryStatus==true)
+                .ToList();
         }
 
         public Query GetById(int id)
@@ -53,5 +102,7 @@ namespace E_Bank.Services
         {
             return _repository.Update(customer);
         }
+
+    
     }
 }

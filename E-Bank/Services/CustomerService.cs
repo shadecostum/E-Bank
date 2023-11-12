@@ -77,5 +77,12 @@ namespace E_Bank.Services
            
 
         }
+
+        public Customer ViewPassBook(int id)
+        {
+          return  _repository.Get().Where(pas=>pas.CustomerId==id && pas.IsActive)
+                            .Include(Pass=>Pass.Accounts.Where(acn=>acn.IsActive==true )).FirstOrDefault();
+                
+        }
     }
 }

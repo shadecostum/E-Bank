@@ -169,9 +169,16 @@ namespace E_Bank.Services
 
         }
 
+        public List<TransactionClass> GetByDate(DateTime dateTime)
+        {
+            DateTime startDate = dateTime.Date;
+            DateTime endDate = startDate.AddDays(1).AddTicks(-1);
+
+           return _Transactionrepository.Get().Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate).ToList();
+        }
+
+
       
-
-
 
 
         //public int Add(TransactionClass transaction)

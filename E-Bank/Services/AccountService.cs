@@ -26,9 +26,8 @@ namespace E_Bank.Services
 
         public List<Account> GetAllRequest()
         {
-            return _repository.GetAll().Where(acn => acn.IsActive == false)
-                              .Include(acn => acn.Customer)
-                              .ThenInclude(cus => cus.Documents)
+            return _repository.GetAll()
+                              .Where(acn => acn.IsActive == false)
                               .ToList();
 
 

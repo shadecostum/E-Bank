@@ -10,15 +10,15 @@ namespace E_Bank.Models
 
         public string QueryText { get; set; }
 
-       // public DateTime QueryDate { get; set; }
+        public DateTime QueryDate { get; set; }
 
         public string ReplyQuery { get; set; }
 
-       // public DateTime ReplyDate { get; set; }
+        public DateTime ReplyDate { get; set; }
 
-        public string QueryStatus { get; set; }
+        public bool QueryStatus { get; set; }
 
-      //  public bool IsActive { get; set; }
+       // public bool IsActive { get; set; }
 
 
         public Customer Customer { get; set; }

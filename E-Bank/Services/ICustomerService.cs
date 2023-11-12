@@ -4,6 +4,8 @@ namespace E_Bank.Services
 {
     public interface ICustomerService
     {
+
+        public Customer ViewPassBook(int id);
         public List<Customer> GetAll();
 
         public Customer GetById(int id);

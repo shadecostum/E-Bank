@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace E_Bank.Migrations
 {
     /// <inheritdoc />
-    public partial class v1 : Migration
+    public partial class version1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,7 +46,7 @@ namespace E_Bank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Admin",
+                name: "adminsTable",
                 columns: table => new
                 {
                     AdminId = table.Column<int>(type: "int", nullable: false)
@@ -57,9 +57,9 @@ namespace E_Bank.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admin", x => x.AdminId);
+                    table.PrimaryKey("PK_adminsTable", x => x.AdminId);
                     table.ForeignKey(
-                        name: "FK_Admin_usersTable_UserId",
+                        name: "FK_adminsTable_usersTable_UserId",
                         column: x => x.UserId,
                         principalTable: "usersTable",
                         principalColumn: "UserId",
@@ -143,8 +143,10 @@ namespace E_Bank.Migrations
                     QueryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QueryText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QueryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReplyQuery = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QueryStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReplyDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    QueryStatus = table.Column<bool>(type: "bit", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -189,8 +191,8 @@ namespace E_Bank.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Admin_UserId",
-                table: "Admin",
+                name: "IX_adminsTable_UserId",
+                table: "adminsTable",
                 column: "UserId",
                 unique: true);
 
@@ -225,7 +227,7 @@ namespace E_Bank.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admin");
+                name: "adminsTable");
 
             migrationBuilder.DropTable(
                 name: "documentsTable");

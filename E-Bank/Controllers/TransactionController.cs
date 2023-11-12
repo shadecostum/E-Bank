@@ -55,59 +55,69 @@ namespace E_Bank.Controllers
             {
                 return Ok("Transaction success");
             }
-            return BadRequest("Bank Server error please try again after some time");
+            throw new UserNotFoundException("Bank Server error please try again after some time ");
+           // return BadRequest("Bank Server error please try again after some time");
         }
-        
 
 
 
 
 
+    
+        //[HttpGet("{id:int}")]
+        //public IActionResult Get(int id)
+        //{
+        //    var transactionData = _transactionService.GetById(id);
 
+        //    if (transactionData != null)
+        //    {
+        //        return Ok(transactionData);
+        //    }
+        //    throw new UserNotFoundException("Cannot find the match id");
+        //}
 
+        [HttpGet("{date:DateTime}")]
+        public IActionResult GetDate(DateTime date)
+        {
+            List<TransactionDto> transactionList = new List<TransactionDto>();
 
+            var transactions = _transactionService.GetByDate(date);
 
+            if (transactions != null)
+            {
+                foreach (var transaction in transactions)
+                {
+                    var conTransaction = ModelToDto(transaction);
+                    transactionList.Add(conTransaction);
+                }
+                return Ok(transactionList);
 
-
-
-
-
-
-
+            }
+            throw new UserNotFoundException("Cannot find any Transaction");
+        }
 
         [HttpGet("")]
         public IActionResult GetAll()
         {
             List<TransactionDto> transactionList = new List<TransactionDto>();
 
-             var balance=  _transactionService.GetAll();
+            var balance = _transactionService.GetAll();
 
-            if(balance.Count== 0)
+            if (balance.Count == 0)
             {
-                return BadRequest("Not found ");
-                
+                return BadRequest("No Transactions on Today");
+
             }
             foreach (var transaction in balance)
             {
-                var conTransaction=ModelToDto(transaction);
+                var conTransaction = ModelToDto(transaction);
                 transactionList.Add(conTransaction);
             }
             return Ok(transactionList);
 
         }
 
-       
-        [HttpGet("{id:int}")]
-        public IActionResult Get(int id)
-        {
-            var transactionData = _transactionService.GetById(id);
 
-            if (transactionData != null)
-            {
-                return Ok(transactionData);
-            }
-            throw new UserNotFoundException("Cannot find the match id");
-        }
 
 
 
@@ -150,42 +160,16 @@ namespace E_Bank.Controllers
                 TransactionType = transaction.TransactionType,
                 TransactionAmount = transaction.TransactionAmount,
                 Description = transaction.Description,
-              //  State = transaction.State,
+               State = transaction.State,
               //  IsActive = transaction.IsActive,
-               // TransactionDate = transaction.TransactionDate,
+                TransactionDate = transaction.TransactionDate,
                 TransactionId = transaction.TransactionId,
             };
         }
 
 
 
-        //[HttpPost("")]
-        //public IActionResult Post(TransactionDto transactionDto) 
-        //{
-        //    var transactionss = ConvertoModel(transactionDto);
-
-        //    var status = _transactionService.Add(transactionss);
-
-        //    if(status != null)
-        //    {
-        //        return Ok(status);
-        //    }
-        //    return BadRequest("cannot added");
-        //}
-
-        //[HttpPut("")]
-        //public IActionResult Put(TransactionDto transactionDto)
-        //{
-        //    var match=_transactionService.GetById(transactionDto.TransactionId);
-
-        //    if(match != null)
-        //    {
-        //        var modified = ConvertoModel(transactionDto);
-        //       var updateTransaction= _transactionService.Update(modified);
-        //        return Ok(updateTransaction);
-        //    }
-        //    return BadRequest("Not matched ");
-        //}
+     
 
     }
 }
