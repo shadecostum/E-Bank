@@ -28,7 +28,7 @@ namespace E_Bank.Controllers
 
             if (matchedAccount != null)
             {
-                return Ok("Query send to customer succes");
+                return Ok(new ReturnMessage() { Message = "Query send succesfully " });
             }
             throw new UserNotFoundException("Cannot send Query internal error ");
         }
@@ -42,6 +42,7 @@ namespace E_Bank.Controllers
                 CustomerId = query.CustomerId,
                  QueryId = query.QueryId,
                 QueryText = query.QueryText,
+                QueryDate= query.QueryDate,
 
 
             };
@@ -56,7 +57,8 @@ namespace E_Bank.Controllers
 
             if (matched.Count== 0)
             {
-                throw new UserNotFoundException("No  Request finded ");
+                // return BadRequest("sorry no query is added");
+                throw new UserNotFoundException("sorry no query is added");
             }
             foreach (var Data in matched)
             {
@@ -72,11 +74,11 @@ namespace E_Bank.Controllers
         {
             var matched= _querService.QueryResponce(queryDto);
 
-            if(matched ==0)
+            if(matched == 0)
             {
-                throw new UserNotFoundException("No  Request finded ");
+                throw new UserNotFoundException("Updation failed ");
             }
-            return Ok("Successfully replied");
+            return Ok(new ReturnMessage() { Message = "Replied succesfully " });
         }
 
 

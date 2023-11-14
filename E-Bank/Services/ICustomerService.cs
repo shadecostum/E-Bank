@@ -16,5 +16,8 @@ namespace E_Bank.Services
 
         public void Delete(Customer customer);
 
+        //one time customer reg checking email
+        public Customer FindUser(int userId);
+
     }
 }

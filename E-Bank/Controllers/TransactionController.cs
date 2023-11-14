@@ -2,8 +2,10 @@
 using E_Bank.Exceptions;
 using E_Bank.Models;
 using E_Bank.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace E_Bank.Controllers
 {
@@ -56,25 +58,10 @@ namespace E_Bank.Controllers
                 return Ok("Transaction success");
             }
             throw new UserNotFoundException("Bank Server error please try again after some time ");
-           // return BadRequest("Bank Server error please try again after some time");
+            // return BadRequest("Bank Server error please try again after some time");
         }
 
 
-
-
-
-    
-        //[HttpGet("{id:int}")]
-        //public IActionResult Get(int id)
-        //{
-        //    var transactionData = _transactionService.GetById(id);
-
-        //    if (transactionData != null)
-        //    {
-        //        return Ok(transactionData);
-        //    }
-        //    throw new UserNotFoundException("Cannot find the match id");
-        //}
 
         [HttpGet("{date:DateTime}")]
         public IActionResult GetDate(DateTime date)

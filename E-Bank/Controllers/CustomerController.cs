@@ -30,7 +30,7 @@ namespace E_Bank.Controllers
                 return Ok(matched);
             }
 
-            return BadRequest("No Account created");
+            throw new UserNotFoundException("Cannot find the match id");
 
         }
 
@@ -136,6 +136,30 @@ namespace E_Bank.Controllers
                 return Ok(matched);
             }
             throw new UserNotFoundException("Cannot find the match id");
+        }
+
+
+
+
+
+        [HttpPost("customerRegister")]//3 register
+
+        public IActionResult Register(CustomerDto customerDto)
+        {
+            //checking existing user first registering
+            var existingUser = _customerService.FindUser(customerDto.UserId);
+
+            if (existingUser == null)
+            {
+                var customer = ConvertoModel(customerDto);
+                var status = _customerService.Add(customer);
+                if (status != null)
+                {
+                    return Ok(new ReturnMessage() { Message = "Customer Detals Registered succesfully " });
+                }
+                return BadRequest("cannot add accoun server error ");
+            }
+            throw new UserNotFoundException("User id alredy Exist");
         }
 
     }

@@ -1,4 +1,6 @@
-﻿using E_Bank.Models;
+﻿using E_Bank.Data;
+using E_Bank.Dto;
+using E_Bank.Models;
 using Microsoft.EntityFrameworkCore;
 using static E_Bank.Repository.IRepository;
 
@@ -84,5 +86,17 @@ namespace E_Bank.Services
                             .Include(Pass=>Pass.Accounts.Where(acn=>acn.IsActive==true )).FirstOrDefault();
                 
         }
+
+
+     
+
+        public Customer FindUser(int userId)
+        {
+            return _repository.Get().Where(use => use.UserId == userId).FirstOrDefault();
+        }
+
+
+
+
     }
 }

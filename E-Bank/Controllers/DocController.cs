@@ -24,11 +24,11 @@ namespace E_Bank.Controllers
             return new DocDto()
             {
                 CustomerId = customer.CustomerId,
-                DocumentId = customer.DocumentId,
-                DocumentData = customer.DocumentData,
+              //  DocumentId = customer.DocumentId,
+               // DocumentData = customer.DocumentData,
                 DocumentType = customer.DocumentType,
-                Status = customer.Status,
-                UploadDate = customer.UploadDate
+               // Status = customer.Status,
+               // UploadDate = customer.UploadDate
                 
             
 
@@ -65,47 +65,84 @@ namespace E_Bank.Controllers
         }
 
 
-        private Documents ConvertoModel(DocDto customerDto)
+        //private Documents ConvertoModel(DocDto customerDto)
+        //{
+        //    return new Documents()
+        //    {
+        //       UploadDate = customerDto.UploadDate,
+        //       CustomerId = customerDto.CustomerId,
+        //       DocumentData = customerDto.DocumentData,
+        //       DocumentType = customerDto.DocumentType,
+        //       Status = customerDto.Status,
+                
+
+        //    };
+        //}
+
+        private Documents ConvertToModel(DocDto docDto, byte[] documentData)
         {
             return new Documents()
             {
-               UploadDate = customerDto.UploadDate,
-               CustomerId = customerDto.CustomerId,
-               DocumentData = customerDto.DocumentData,
-               DocumentType = customerDto.DocumentType,
-               Status = customerDto.Status,
-                
-
+                UploadDate = DateTime.Now,
+                CustomerId = docDto.CustomerId,
+                DocumentData = documentData,
+                DocumentType = docDto.DocumentType,
+                Status = "pending"
             };
         }
-
         [HttpPost("")]
-        public IActionResult Post(DocDto customerDto)
+        public IActionResult Post([FromForm] DocDto docDto)
         {
-            var customer = ConvertoModel(customerDto);
-            var status = _docService.Add(customer);
-
-            if (status != null)
+            // Check if a file is provided
+            if (docDto.DocumentFile != null && docDto.DocumentFile.Length > 0)
             {
-                return Ok(status);
+                using (var memoryStream = new MemoryStream())
+                {
+                    docDto.DocumentFile.CopyTo(memoryStream);
+                    byte[] fileBytes = memoryStream.ToArray();
+
+                    // Now, you can save the fileBytes to your database or perform other actions
+                    var customer = ConvertToModel(docDto, fileBytes);
+                    var status = _docService.Add(customer);
+
+                    if (status != null)
+                    {
+                        return Ok(new ReturnMessage() { Message = "Document sent successfully" });
+                    }
+                    return BadRequest("Cannot add document");
+                }
             }
-            return BadRequest("cannot added");
-        }
-
-        [HttpPut]
-
-        public IActionResult Put(DocDto customerDto)
-        {
-            var Customer = _docService.GetById(customerDto.DocumentId);
-
-            if (Customer != null)
+            else
             {
-                var modified = ConvertoModel(customerDto);
-                _docService.Update(modified);
-                return Ok(modified);
+                return BadRequest("No file provided");
             }
-            return BadRequest("Cannot modify data not found");
         }
+        //public IActionResult Post(DocDto customerDto)
+        //{
+        //    var customer = ConvertoModel(customerDto);
+        //    var status = _docService.Add(customer);
+
+        //    if (status != null)
+        //    {
+        //        return Ok(new ReturnMessage() { Message = "Documnet send succesfully " });
+        //    }
+        //    return BadRequest("cannot added");
+        //}
+
+        //[HttpPut]
+
+        //public IActionResult Put(DocDto customerDto)
+        //{
+        //    var Customer = _docService.GetById(customerDto.DocumentId);
+
+        //    if (Customer != null)
+        //    {
+        //       // var modified = ConvertoModel(customerDto);
+        //        _docService.Update(modified);
+        //        return Ok(modified);
+        //    }
+        //    return BadRequest("Cannot modify data not found");
+        //}
 
         [HttpDelete]
         public IActionResult Delete(int id)

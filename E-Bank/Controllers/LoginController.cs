@@ -39,7 +39,7 @@ namespace E_Bank.Controllers
                     return Ok(new ReturnMessage() { Message="Registered succesfully"});
 
                 }
-                throw new UserNotFoundException("Cannot regsiter accoun inavlid entry ");// need to find exception 1
+                throw new UserNotFoundException("Cannot regsiter account inavlid entry ");// need to find exception 1
 
             }
             throw new UserNotFoundException("Account alredy exist");//ok

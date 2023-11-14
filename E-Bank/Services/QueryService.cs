@@ -43,11 +43,6 @@ namespace E_Bank.Services
 
          var  matchedList=  _repository.Get().Where(qu=>qu.QueryStatus==false).ToList();
 
-            if(matchedList.Count == 0 )
-            {
-                return null;
-            }
-
             return matchedList;
 
         }
