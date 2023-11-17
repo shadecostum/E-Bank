@@ -59,11 +59,15 @@ namespace E_Bank.Controllers
                 {
                     var token = CreateToken(existingUser);
                     Response.Headers.Add("Jwt", JsonConvert.SerializeObject(token));
-                    var roleName = _userRepo.GetRoleName(existingUser);
+                    // var roleName = _userRepo.GetRoleName(existingUser);
                     //var userId=_userRepo.
 
-                    return Ok(new ReturnMessage() { Message = roleName});//for just login this much needed we need give toke so upper line
-                    //now passing token data to responce logined
+                    return Ok(new LoginResponceDto()
+                    {
+                        UserId = existingUser.UserId,
+                        UserName = existingUser.UserName,
+                        RoleName = _userRepo.GetRoleName(existingUser)
+                    }); 
                 }
                
             }
