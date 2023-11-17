@@ -1,6 +1,8 @@
 ﻿using E_Bank.Dto;
 using E_Bank.Models;
+using E_Bank.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using static E_Bank.Repository.IRepository;
 
 namespace E_Bank.Services
@@ -16,6 +18,24 @@ namespace E_Bank.Services
                 _repository = repository;
                 _transactionClassRepository = transactionRep;
             }
+
+        //public PageList<TransactionClass> getallaccounts(PageParameters pageparameters)
+        //{
+
+        //    var records = _transactionClassRepository.Get().Where(tr => tr.IsActive).ToList();
+        //    return PageList<TransactionClass>.ToPagedList(records, pageparameters.PageNumber, pageparameters.PageSize);
+        //}
+
+
+        //public List<TransactionClass> getallaccountsname()
+        //{
+           
+        //    var records = _transactionClassRepository.Get().Where(tr => tr.IsActive).ToList();
+        //    return records;
+        //}
+
+
+
 
         public List<Account> GetAll()
         {
@@ -56,6 +76,21 @@ namespace E_Bank.Services
 
 
         }
+
+
+        //account filter for transaction
+        public List<Account> AccountFilter(int id)
+        {
+           var matched= _repository.Get()
+                        .Where(acn => acn.AccountNumber == id && acn.IsActive == true)
+                        .Include(acn => acn.Customer)  // Include the Customer navigation property
+                        .Include(acn => acn.Transactions.Where(tran => tran.IsActive == true))
+                        .ToList();
+
+            return matched;
+        }
+
+
 
 
         public int Add(Account account)

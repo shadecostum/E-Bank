@@ -42,7 +42,10 @@ namespace E_Bank.Repository
         }
 
         
-
+        //public int GetRoleUserId(User user)
+        //{
+        //    return _context.usersTable.Where(us=>us.UserId==user)
+        //}
 
     }
 }

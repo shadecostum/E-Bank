@@ -22,7 +22,7 @@ namespace E_Bank.Models
 
 
 
-        public Admin admin { get; set; }
+        public Admin Admin { get; set; }
 
         public Customer Customer { get; set; }
 

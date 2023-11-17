@@ -5,6 +5,7 @@ using E_Bank.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -56,10 +57,12 @@ namespace E_Bank.Controllers
                 //hashing have done
                 if(BCrypt.Net.BCrypt.Verify(userDto.Password, existingUser.Password))
                 {
-                    var jwt = CreateToken(existingUser);
+                    var token = CreateToken(existingUser);
+                    Response.Headers.Add("Jwt", JsonConvert.SerializeObject(token));
+                    var roleName = _userRepo.GetRoleName(existingUser);
+                    //var userId=_userRepo.
 
-
-                    return Ok(new Token() { ActualToken=jwt});//for just login this much needed we need give toke so upper line
+                    return Ok(new ReturnMessage() { Message = roleName});//for just login this much needed we need give toke so upper line
                     //now passing token data to responce logined
                 }
                

@@ -20,7 +20,7 @@ namespace E_Bank.Controllers
         }
 
 
-        [HttpGet("passbook")]
+        [HttpGet("passbook")] 
         public IActionResult PassBook(int id)
         {
            var matched= _customerService.ViewPassBook(id);

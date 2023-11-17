@@ -11,10 +11,12 @@ namespace E_Bank.Models
         public string AccountType { get; set; }
        // public string AccountNumber { get; set; }
 
+        //OpeningDate
         public DateTime OpenningDate { get; set; }
         public double AccountBalance { get; set; }
 
-        public double IntrestRate { get; set; }
+        //Interest
+        public double IntrestRate { get; set; } 
 
         public bool IsActive { get; set; }
 

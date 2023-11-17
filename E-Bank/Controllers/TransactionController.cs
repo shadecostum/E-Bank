@@ -24,14 +24,14 @@ namespace E_Bank.Controllers
 
         //deposite
 
-        [HttpPost("deposite")]
+        [HttpPost("deposit")]
         public IActionResult DepositeAmount([FromBody]TransactionDto transactionDto)
         {
             var result = _transactionService.Deposite(transactionDto);
 
             if(result == 1)
             {
-                return Ok("Transaction success");
+                return Ok(new ReturnMessage() { Message = "Deposited succesfully " });
             }
 
             return BadRequest("server error please try again after some time");
@@ -44,10 +44,12 @@ namespace E_Bank.Controllers
             var result = _transactionService.Withdraw(transactionDto);
             if(result == 1)
             {
-                return Ok("withdrew  success");
+                return Ok(new ReturnMessage() { Message = "Withdraw succesfully " });
             }
             return BadRequest("Bank Server error please try again after some time");
         }
+
+
 
         [HttpPost("TransferAmount")]
         public IActionResult TransferAmount([FromBody]TransferDto transferDto)
@@ -55,7 +57,7 @@ namespace E_Bank.Controllers
             var result = _transactionService.TransferAmount(transferDto);
             if (result == 1)
             {
-                return Ok("Transaction success");
+                return Ok(new ReturnMessage() { Message = "Amount Transfered succesfully " });
             }
             throw new UserNotFoundException("Bank Server error please try again after some time ");
             // return BadRequest("Bank Server error please try again after some time");
@@ -63,12 +65,12 @@ namespace E_Bank.Controllers
 
 
 
-        [HttpGet("{date:DateTime}")]
-        public IActionResult GetDate(DateTime date)
+        [HttpPost("DateFilter")]
+        public IActionResult GetDate([FromBody]DateDto dateDto)
         {
             List<TransactionDto> transactionList = new List<TransactionDto>();
 
-            var transactions = _transactionService.GetByDate(date);
+            var transactions = _transactionService.GetByDate(dateDto.Date, dateDto.EndDate);
 
             if (transactions != null)
             {
@@ -82,6 +84,31 @@ namespace E_Bank.Controllers
             }
             throw new UserNotFoundException("Cannot find any Transaction");
         }
+
+        [HttpGet("{date:DateTime}")]
+        public IActionResult GetDate(DateTime date)
+        {
+            List<TransactionDto> transactionList = new List<TransactionDto>();
+
+            var transactions = _transactionService.GetBysingleDate(date);
+
+            if (transactions != null)
+            {
+                foreach (var transaction in transactions)
+                {
+                    var conTransaction = ModelToDto(transaction);
+                    transactionList.Add(conTransaction);
+                }
+                return Ok(transactionList);
+
+            }
+            throw new UserNotFoundException("Cannot find any Transaction");
+        }
+
+
+
+
+
 
         [HttpGet("")]
         public IActionResult GetAll()
@@ -103,6 +130,13 @@ namespace E_Bank.Controllers
             return Ok(transactionList);
 
         }
+
+        
+
+
+
+
+
 
 
 
@@ -130,7 +164,7 @@ namespace E_Bank.Controllers
                 TransactionType = transaction.TransactionType,
                 TransactionAmount = transaction.TransactionAmount,
                 Description = transaction.Description,
-                State = "sucsess",
+                State = "Sucsess",
                 IsActive = true,
                 TransactionDate = DateTime.Now,
                 AccountId = transaction.AccountId,
@@ -147,7 +181,7 @@ namespace E_Bank.Controllers
                 TransactionType = transaction.TransactionType,
                 TransactionAmount = transaction.TransactionAmount,
                 Description = transaction.Description,
-               State = transaction.State,
+               //State = transaction.State,
               //  IsActive = transaction.IsActive,
                 TransactionDate = transaction.TransactionDate,
                 TransactionId = transaction.TransactionId,

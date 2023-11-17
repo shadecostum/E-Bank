@@ -52,7 +52,7 @@ namespace E_Bank.Services
                     TransactionAmount = transactionDto.TransactionAmount,
                     IsActive =  true,
                     TransactionType = transactionDto.TransactionType,
-                    State =  "sucess",
+                    State =  "Sucess",
 
                 };
                 _Transactionrepository.Add(newTransaction);
@@ -149,6 +149,8 @@ namespace E_Bank.Services
             return _Transactionrepository.GetAll().Where(tran=>tran.IsActive).ToList();
 
         }
+
+
         public TransactionClass GetById(int id)
         {
             var tableName = _Transactionrepository.Get();
@@ -169,16 +171,27 @@ namespace E_Bank.Services
 
         }
 
-        public List<TransactionClass> GetByDate(DateTime dateTime)
+
+        //single Date filter
+        public List<TransactionClass> GetBysingleDate(DateTime dateTime)
         {
             DateTime startDate = dateTime.Date;
             DateTime endDate = startDate.AddDays(1).AddTicks(-1);
 
-           return _Transactionrepository.Get().Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate).ToList();
+            return _Transactionrepository.Get().Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate).ToList();
         }
 
 
-      
+        //two date filter
+        public List<TransactionClass> GetByDate(DateTime dateTime, DateTime endDates)
+        {
+            DateTime startDate = dateTime.Date;
+            DateTime endDate = endDates.Date;
+
+            return _Transactionrepository.Get().Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate).ToList();
+        }
+
+
 
 
         //public int Add(TransactionClass transaction)

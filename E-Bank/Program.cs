@@ -19,7 +19,7 @@ namespace E_Bank
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+          
 
 
             //adding connection to database as Mycontext-1
@@ -40,7 +40,7 @@ namespace E_Bank
             {
                 option.AddPolicy("AllowLocalhost4200", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("*");
                 });
             });//for connecting frond end
 
@@ -93,7 +93,7 @@ namespace E_Bank
             }
 
             app.UseHttpsRedirection();
-
+           // app.UseRouting();//delete
             app.UseCors("AllowLocalhost4200");//front end connection
             //authentication needed
             app.UseAuthentication();

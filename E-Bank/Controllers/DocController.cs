@@ -4,6 +4,7 @@ using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace E_Bank.Controllers
 {
@@ -87,7 +88,7 @@ namespace E_Bank.Controllers
                 CustomerId = docDto.CustomerId,
                 DocumentData = documentData,
                 DocumentType = docDto.DocumentType,
-                Status = "pending"
+                Status = "Pending"
             };
         }
         [HttpPost("")]
@@ -117,6 +118,7 @@ namespace E_Bank.Controllers
                 return BadRequest("No file provided");
             }
         }
+
         //public IActionResult Post(DocDto customerDto)
         //{
         //    var customer = ConvertoModel(customerDto);

@@ -15,7 +15,7 @@ namespace E_Bank.Dto
 
         public DateTime TransactionDate { get; set; }
 
-        public string State { get; set; }//pending or approved show
+       // public string State { get; set; }//pending or approved show
 
       //  public bool IsActive { get; set; }//soft delete
 

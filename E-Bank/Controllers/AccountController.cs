@@ -4,6 +4,7 @@ using E_Bank.Models;
 using E_Bank.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace E_Bank.Controllers
 {
@@ -88,18 +89,18 @@ namespace E_Bank.Controllers
 
         }
 
-        //[HttpGet("TransactionFilter/{id:int}")] //admin search using id get specific customer 
-        //public IActionResult Get(int id)
-        //{
-        //    var matched = _accountService.GetById(id);
+        [HttpGet("TransactionFilter/{id:int}")] //admin search using id get specific customer 
+        public IActionResult GetAccountTransactions(int id)
+        {
+            var matched = _accountService.AccountFilter(id);
 
-        //    if (matched != null)
-        //    {
-        //        return Ok(matched);
-        //    }
-        //    throw new UserNotFoundException("Cannot find the match id");
+            if (matched != null)
+            {
+                return Ok(matched);
+            }
+            throw new UserNotFoundException("Cannot find the match id");
 
-        //}
+        }
 
 
         [HttpGet("{id:int}")] //admin search using id get specific customer 
@@ -136,11 +137,12 @@ namespace E_Bank.Controllers
         [HttpPost("customerAccountRequest")]
         public IActionResult Post(AccountDto accountDto)
         {
+            //needed to check savings and customerid same exist error return
             var Converted=DtoToModel(accountDto);
-          var sucess=  _accountService.Add(Converted);
+            var sucess=  _accountService.Add(Converted);
             if(sucess !=null)
             {
-              return  Ok("Account request successfully submited");
+              return  Ok(new ReturnMessage() { Message = "Account Request send succesfully " });
             }
             return BadRequest("Account creating error");
         }
@@ -170,7 +172,30 @@ namespace E_Bank.Controllers
             throw new UserNotFoundException("Cannot find any Account ");
         }
 
-       
+
+
+
+        //[HttpGet("viewPassbook")]
+        //public IActionResult GetAllAccount([FromBody] PageParameters pageParameters)
+        //{
+        //    var banks = _accountService.GetAllAccounts(pageParameters);
+
+        //    var metaData = new
+        //    {
+        //        banks.TotalCount,
+        //        banks.PageSize,
+        //        banks.CurrentPage,
+        //       // banks.TotalPages,
+        //        banks.HasNext,
+        //        banks.HasPrevious,
+
+        //    };
+
+        //    Response.Headers.Add("x-Pagination", JsonConvert.SerializeObject(metaData));
+        //    var result = banks;
+        //    return Ok(result);
+        //}
+
 
 
     }

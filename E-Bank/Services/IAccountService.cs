@@ -1,5 +1,6 @@
 ﻿using E_Bank.Dto;
 using E_Bank.Models;
+using E_Bank.Repository;
 
 namespace E_Bank.Services
 {
@@ -11,6 +12,8 @@ namespace E_Bank.Services
 
         public int ActivateRequest(int id);
 
+        public List<Account> AccountFilter(int id);//account flter for transaction
+
         public Account GetById(int id);
 
         public int Add(Account account);
@@ -18,5 +21,9 @@ namespace E_Bank.Services
         public Account Update(Account account);
 
         public void Delete(Account account);
+
+
+        //public PageList<TransactionClass> getallaccounts(PageParameters pageparameters);//pagination
+        //public List<TransactionClass> GetAllAccountsName();
     }
 }
