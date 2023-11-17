@@ -25,6 +25,7 @@ namespace E_Bank.Controllers
             _config = config;
         }
 
+
         [HttpPost("register")]//3 register
 
         public IActionResult Register(UserDto userDto)

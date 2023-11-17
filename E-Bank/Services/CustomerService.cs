@@ -95,8 +95,9 @@ namespace E_Bank.Services
             return _repository.Get().Where(use => use.UserId == userId).FirstOrDefault();
         }
 
-
-
-
+        public Customer GetCustomer(int id)
+        {
+            return _repository.Get().Where(cus => cus.UserId == id).FirstOrDefault();
+        }
     }
 }

@@ -159,8 +159,30 @@ namespace E_Bank.Controllers
                 }
                 return BadRequest("cannot add accoun server error ");
             }
-            throw new UserNotFoundException("User id alredy Exist");
+            throw new UserNotFoundException(" Customer is alredy Registerd");
         }
+
+
+
+
+        [HttpGet("customerDataFetch/{id:int}")]
+        public IActionResult CustomerDataFetch(int id)
+        {
+            var matchedCustomer = _customerService.GetCustomer(id);
+            if (matchedCustomer == null)
+            {
+                throw new UserNotFoundException("User id alredy Exist");
+            }
+
+            return Ok(matchedCustomer);
+        }
+
+
+
+
+
+
+
 
     }
 }

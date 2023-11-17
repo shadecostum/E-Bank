@@ -19,5 +19,8 @@ namespace E_Bank.Services
         //one time customer reg checking email
         public Customer FindUser(int userId);
 
+        //userid get customer details
+        public Customer GetCustomer(int id);
+
     }
 }
