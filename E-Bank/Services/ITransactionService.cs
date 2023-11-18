@@ -9,7 +9,7 @@ namespace E_Bank.Services
 
         public List<TransactionClass> GetBysingleDate(DateTime dateTime);//admin date filter
 
-        public List<TransactionClass> GetByDate(DateTime dateTime, DateTime endDates);
+        public List<TransactionClass> GetByDate(DateDto dateDto);
         public int Deposite(TransactionDto transaction);
 
         public int Withdraw(TransactionDto transaction);

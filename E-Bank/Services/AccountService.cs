@@ -129,6 +129,36 @@ namespace E_Bank.Services
 
         }
 
-       
+        public int UpdateInterest(AccountIntrestUpdateDto accountIntrestUpdateDto)
+        {
+          var matched= _repository.GetAll().Where(acn=>acn.AccountType==accountIntrestUpdateDto.AccountType).ToList();
+
+            if (matched.Count == 0)
+            {
+                return 0;
+            }
+
+            foreach (var account in matched)
+            {
+                account.IntrestRate=accountIntrestUpdateDto.InterestRate;
+               
+                _repository.Update(account);
+
+            }
+            return 1;
+
+
+
+        }
+
+        public Account FindAccountId(int id)
+        {
+          var matchedAccount=   _repository.Get().Where(acn=>acn.CustomerId==id && acn.AccountType=="Savings").FirstOrDefault();
+            if (matchedAccount==null)
+            {
+                return null;
+            }
+            return matchedAccount;
+        }
     }
 }

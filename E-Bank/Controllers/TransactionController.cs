@@ -60,6 +60,7 @@ namespace E_Bank.Controllers
                 return Ok(new ReturnMessage() { Message = "Amount Transfered succesfully " });
             }
             throw new UserNotFoundException("Bank Server error please try again after some time ");
+
             // return BadRequest("Bank Server error please try again after some time");
         }
 
@@ -70,7 +71,7 @@ namespace E_Bank.Controllers
         {
             List<TransactionDto> transactionList = new List<TransactionDto>();
 
-            var transactions = _transactionService.GetByDate(dateDto.Date, dateDto.EndDate);
+            var transactions = _transactionService.GetByDate(dateDto);
 
             if (transactions != null)
             {
@@ -82,7 +83,7 @@ namespace E_Bank.Controllers
                 return Ok(transactionList);
 
             }
-            throw new UserNotFoundException("Cannot find any Transaction");
+            throw new UserNotFoundException("Cannot find any Transaction from given account Number");
         }
 
         [HttpGet("{date:DateTime}")]

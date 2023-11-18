@@ -5,5 +5,7 @@
         public DateTime Date { get; set; }
 
         public DateTime EndDate { get; set;}
+
+        public int AccountNumber { get; set;}
     }
 }

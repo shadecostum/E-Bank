@@ -172,6 +172,23 @@ namespace E_Bank.Controllers
             throw new UserNotFoundException("Cannot find any Account ");
         }
 
+        //new added
+        [HttpPost("AccountIntrestUpdate")]
+        public IActionResult updateIntrest([FromBody]AccountIntrestUpdateDto accountIntrestUpdateDto)
+        {
+
+            var status = _accountService.UpdateInterest(accountIntrestUpdateDto);
+
+            if(status==0)
+            {
+                throw new UserNotFoundException("Cannot find any Account to update Interest ");
+            }
+            return Ok(new ReturnMessage() { Message = " succesfully interest updated" });
+
+
+
+           
+        }
 
 
 
@@ -196,6 +213,19 @@ namespace E_Bank.Controllers
         //    return Ok(result);
         //}
 
+
+        //customer id passed and matched account find
+        [HttpGet("customerIdAccountIdget/{id:int}")]
+        public IActionResult FindAccountId(int id)
+        {
+          var matchedAccountId=  _accountService.FindAccountId(id);
+
+            if (matchedAccountId!=null)
+            { return Ok(matchedAccountId); }
+
+            throw new UserNotFoundException("Cannot find any AccountId so no account added");
+        }
+       
 
 
     }

@@ -22,6 +22,9 @@ namespace E_Bank.Services
 
         public void Delete(Account account);
 
+        public int UpdateInterest(AccountIntrestUpdateDto accountIntrestUpdateDto);//update account intrest
+
+        public Account FindAccountId(int id);//customerId fetch account id
 
         //public PageList<TransactionClass> getallaccounts(PageParameters pageparameters);//pagination
         //public List<TransactionClass> GetAllAccountsName();

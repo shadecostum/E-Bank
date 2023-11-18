@@ -183,12 +183,15 @@ namespace E_Bank.Services
 
 
         //two date filter
-        public List<TransactionClass> GetByDate(DateTime dateTime, DateTime endDates)
+        public List<TransactionClass> GetByDate(DateDto dateDto)
         {
-            DateTime startDate = dateTime.Date;
-            DateTime endDate = endDates.Date;
+            DateTime startDate = dateDto.Date;
+            DateTime endDate = dateDto.EndDate;
+            
 
-            return _Transactionrepository.Get().Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate).ToList();
+            return _Transactionrepository.Get()
+                .Where(tra => tra.TransactionDate >= startDate && tra.TransactionDate <= endDate 
+                 && tra.AccountId==dateDto.AccountNumber).ToList();
         }
 
 
