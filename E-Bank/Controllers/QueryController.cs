@@ -111,6 +111,17 @@ namespace E_Bank.Controllers
             throw new UserNotFoundException("Cannot find the match id");
         }
 
+        [HttpGet("customerId/{id:int}")]
+        public IActionResult GetQuery(int id)
+        {
+            var CustomerData = _querService.GetCustomerById(id);
+
+            if (CustomerData.Count != 0)
+            {
+                return Ok(CustomerData);
+            }
+            throw new UserNotFoundException("Cannot find the match id");
+        }
 
         private Query ConvertoModel(QueryDto queryDto)
         {

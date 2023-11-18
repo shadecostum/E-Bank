@@ -76,14 +76,14 @@ namespace E_Bank.Controllers
 
 
 
-
+        //used for admin activate account
         [HttpGet("activeId/{id:int}")]
         public IActionResult ActivateAccount(int id)
         {
           var result= _accountService.ActivateRequest(id);
             if (result != null)
             {
-              return  Ok("Activated success full");
+              return  Ok(new ReturnMessage() { Message = "Account Request send succesfully " });
             }
             throw new UserNotFoundException("Cannot find the match id");
 

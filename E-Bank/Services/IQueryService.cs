@@ -22,5 +22,8 @@ namespace E_Bank.Services
         public Query Update(Query customer);
 
         public void Delete(Query customer);
+
+
+      public List<Query> GetCustomerById(int id);
     }
 }

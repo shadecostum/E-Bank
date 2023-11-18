@@ -98,6 +98,9 @@ namespace E_Bank.Services
             return _repository.Update(customer);
         }
 
-    
+        public List<Query> GetCustomerById(int id)
+        {
+          return  _repository.Get().Where(qu => qu.CustomerId == id && qu.QueryStatus == true).ToList();
+        }
     }
 }
