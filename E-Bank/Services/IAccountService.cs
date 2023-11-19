@@ -26,7 +26,7 @@ namespace E_Bank.Services
 
         public Account FindAccountId(int id);//customerId fetch account id
 
-        //public PageList<TransactionClass> getallaccounts(PageParameters pageparameters);//pagination
+        //public PageList<TransactionClass> GetAllAccount(PageParameters pageparameters);//pagination
         //public List<TransactionClass> GetAllAccountsName();
     }
 }

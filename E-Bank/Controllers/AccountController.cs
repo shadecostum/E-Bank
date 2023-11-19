@@ -147,6 +147,8 @@ namespace E_Bank.Controllers
             return BadRequest("Account creating error");
         }
 
+
+
         [HttpPut("")]
         public IActionResult Put(AccountDto accountDto)
         {
@@ -192,17 +194,17 @@ namespace E_Bank.Controllers
 
 
 
-        //[HttpGet("viewPassbook")]
+        //[HttpGet("pagination")]
         //public IActionResult GetAllAccount([FromBody] PageParameters pageParameters)
         //{
-        //    var banks = _accountService.GetAllAccounts(pageParameters);
+        //    var banks = _accountService.GetAllAccount(pageParameters);
 
         //    var metaData = new
         //    {
         //        banks.TotalCount,
         //        banks.PageSize,
         //        banks.CurrentPage,
-        //       // banks.TotalPages,
+        //        // banks.TotalPages,
         //        banks.HasNext,
         //        banks.HasPrevious,
 

@@ -19,7 +19,7 @@ namespace E_Bank.Services
                 _transactionClassRepository = transactionRep;
             }
 
-        //public PageList<TransactionClass> getallaccounts(PageParameters pageparameters)
+        //public PageList<TransactionClass> GetAllAccount(PageParameters pageparameters)
         //{
 
         //    var records = _transactionClassRepository.Get().Where(tr => tr.IsActive).ToList();
@@ -27,9 +27,9 @@ namespace E_Bank.Services
         //}
 
 
-        //public List<TransactionClass> getallaccountsname()
+        //public List<TransactionClass> GetAllAccountsName()
         //{
-           
+
         //    var records = _transactionClassRepository.Get().Where(tr => tr.IsActive).ToList();
         //    return records;
         //}
