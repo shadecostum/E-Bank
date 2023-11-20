@@ -111,7 +111,7 @@ namespace E_Bank.Controllers
 
 
 
-        [HttpGet("")]
+        [HttpGet("showAllTransaction")]
         public IActionResult GetAll()
         {
             List<TransactionDto> transactionList = new List<TransactionDto>();
