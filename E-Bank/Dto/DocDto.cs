@@ -8,13 +8,13 @@ namespace E_Bank.Dto
 
 
        // public int DocumentId { get; set; }
-        public IFormFile DocumentFile { get; set; }
+        public byte[] DocumentData{ get; set; }
 
         public string DocumentType { get; set; }
 
-       // public DateTime UploadDate { get; set; }
+        public DateTime UploadDate { get; set; }
 
-       // public string Status { get; set; }
+        public string Status { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }

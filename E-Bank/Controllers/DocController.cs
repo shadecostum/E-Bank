@@ -25,33 +25,48 @@ namespace E_Bank.Controllers
             return new DocDto()
             {
                 CustomerId = customer.CustomerId,
-              //  DocumentId = customer.DocumentId,
-               // DocumentData = customer.DocumentData,
+               // DocumentId = customer.DocumentId,
+                DocumentData = customer.DocumentData,
                 DocumentType = customer.DocumentType,
-               // Status = customer.Status,
-               // UploadDate = customer.UploadDate
+                Status = customer.Status,
+                UploadDate = customer.UploadDate
                 
             
 
             };
         }
 
-        [HttpGet("")]
-        public IActionResult GetAll()
-        {
-            List<DocDto> result = new List<DocDto>();
-            var DataList = _docService.GetAll();
 
-            if (DataList.Count == 0)
+        [HttpGet]
+        public IActionResult GetAllDocuments()
+        {
+          
+            var documents = _docService.GetAll();
+
+            if (documents.Count==0)
             {
-                return BadRequest("No customer Added");
+                return NotFound("No documents found");
             }
-            foreach (var Data in DataList)
-            {
-                result.Add(ModelToDto(Data));
-            }
-            return Ok(result);
+           
+
+            return Ok(documents);
         }
+        //[HttpGet("")]
+        //public IActionResult GetAll()
+        //{
+        //    List<DocDto> result = new List<DocDto>();
+        //    var DataList = _docService.GetAll();
+
+        //    if (DataList.Count == 0)
+        //    {
+        //        return BadRequest("No customer Added");
+        //    }
+        //    foreach (var Data in DataList)
+        //    {
+        //        result.Add(ModelToDto(Data));
+        //    }
+        //    return Ok(result);
+        //}
 
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
@@ -91,33 +106,33 @@ namespace E_Bank.Controllers
                 Status = "Pending"
             };
         }
-        [HttpPost("")]
-        public IActionResult Post([FromForm] DocDto docDto)
-        {
-            // Check if a file is provided
-            if (docDto.DocumentFile != null && docDto.DocumentFile.Length > 0)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    docDto.DocumentFile.CopyTo(memoryStream);
-                    byte[] fileBytes = memoryStream.ToArray();
+        //[HttpPost("")]
+        //public IActionResult Post([FromForm] DocDto docDto)
+        //{
+        //    // Check if a file is provided
+        //    if (docDto.DocumentFile != null && docDto.DocumentFile.Length > 0)
+        //    {
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            docDto.DocumentFile.CopyTo(memoryStream);
+        //            byte[] fileBytes = memoryStream.ToArray();
 
-                    // Now, you can save the fileBytes to your database or perform other actions
-                    var customer = ConvertToModel(docDto, fileBytes);
-                    var status = _docService.Add(customer);
+        //            // Now, you can save the fileBytes to your database or perform other actions
+        //            var customer = ConvertToModel(docDto, fileBytes);
+        //            var status = _docService.Add(customer);
 
-                    if (status != null)
-                    {
-                        return Ok(new ReturnMessage() { Message = "Document sent successfully" });
-                    }
-                    return BadRequest("Cannot add document");
-                }
-            }
-            else
-            {
-                return BadRequest("No file provided");
-            }
-        }
+        //            if (status != null)
+        //            {
+        //                return Ok(new ReturnMessage() { Message = "Document sent successfully" });
+        //            }
+        //            return BadRequest("Cannot add document");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("No file provided");
+        //    }
+        //}
 
         //public IActionResult Post(DocDto customerDto)
         //{
@@ -160,6 +175,51 @@ namespace E_Bank.Controllers
 
 
 
+        [HttpPost("upload")]
+        public IActionResult UploadDocument([FromForm] CustomerDocumentUploadDto documentDto)
+        {
+            if (documentDto == null || documentDto.DocumentFile == null || documentDto.DocumentFile.Length <= 0)
+            {
+                return BadRequest("Invalid data or file");
+            }
 
+            using (var ms = new MemoryStream())
+            {
+                documentDto.DocumentFile.CopyTo(ms);
+                var customerDocument = new Documents
+                {
+                    DocumentType = documentDto.DocumentType,
+                    DocumentData = ms.ToArray(),
+                    CustomerId = documentDto.CustomerId,
+                    UploadDate= DateTime.Now,
+                    Status= "Success"
+                };
+
+             
+              var statuss =  _docService.Add(customerDocument);
+                if (statuss==1)
+                {
+                    return Ok(new ReturnMessage() { Message = " succesfully Documnet Uploaded" });
+                }
+                return BadRequest("error in documnet uploading");
+               
+            }
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

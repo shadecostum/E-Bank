@@ -95,8 +95,26 @@ namespace E_Bank.Services
 
         public int Add(Account account)
             {
-                return _repository.Add(account);
+          var save=  _repository.GetAll().Where(acc => acc.AccountType == "Savings").FirstOrDefault();
+          var current = _repository.GetAll().Where(acc => acc.AccountType == "Current").FirstOrDefault();
+          var Fdd = _repository.GetAll().Where(acc => acc.AccountType == "FD").FirstOrDefault();
+
+           
+            if( save.AccountType == account.AccountType )
+            {
+                account.IntrestRate = save.IntrestRate;
             }
+            else if(current.AccountType == account.AccountType )
+            {
+                account.IntrestRate=current.IntrestRate;
+            }
+            else if(Fdd.AccountType == account.AccountType )
+            {
+                account.IntrestRate = Fdd.IntrestRate;
+            }
+            return _repository.Add(account);
+
+        }
 
         public Account GetById(int id)
         {
@@ -131,6 +149,9 @@ namespace E_Bank.Services
 
         public int UpdateInterest(AccountIntrestUpdateDto accountIntrestUpdateDto)
         {
+
+            
+
           var matched= _repository.GetAll().Where(acn=>acn.AccountType==accountIntrestUpdateDto.AccountType).ToList();
 
             if (matched.Count == 0)
@@ -151,9 +172,10 @@ namespace E_Bank.Services
 
         }
 
-        public Account FindAccountId(int id)
+        public List<Account> FindAccountId(int id)
         {
-          var matchedAccount=   _repository.Get().Where(acn=>acn.CustomerId==id && acn.AccountType=="Savings").FirstOrDefault();
+          var matchedAccount=   _repository.Get()
+                .Where(acn=>acn.CustomerId==id && acn.AccountType=="Savings" || acn.AccountType=="Current").ToList();
             if (matchedAccount==null)
             {
                 return null;

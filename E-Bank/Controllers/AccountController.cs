@@ -64,10 +64,7 @@ namespace E_Bank.Controllers
             {
                 throw new UserNotFoundException("Cannot find any Account ");
             }
-            //foreach (var Data in DataList)
-            //{
-            //    result.Add(ModelToDto(Data));
-            //}
+           
             return Ok(DataList);
         }
 
