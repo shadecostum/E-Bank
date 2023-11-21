@@ -135,7 +135,7 @@ namespace E_Bank.Services
                 Description = transactionDto.Description,
                 IsActive = true,
                 TransactionType = "Transfer Amount",
-                AccountId = transactionDto.AccountNumber,
+                AccountId = transactionDto.TargetAccountNumber,
                 State = "Success",
 
             };
